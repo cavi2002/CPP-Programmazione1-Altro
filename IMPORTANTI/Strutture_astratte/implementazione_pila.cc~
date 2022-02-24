@@ -1,0 +1,75 @@
+#include <iostream>
+using namespace std;
+
+const int DIM = 20;
+
+struct pila{
+  int indice;
+  int * v;
+};
+
+void init(pila & p){
+  p.indice = 0;
+  p.v = new int[DIM];
+}
+
+void push(pila & p, int elemento){
+  if(p.indice>=DIM){
+    cout << "PILA PIENA" << endl;
+  }else{
+    p.v[p.indice] = elemento;
+    p.indice += 1;
+  }
+}
+
+void pop(pila & p){
+  p.indice -= 1;
+}
+
+int top(pila p){
+  return p.v[p.indice-1];
+}
+
+void deinit(pila & p){
+  delete[] p.v;
+}
+
+/*allocato staticamente
+struct pila{
+  int h;
+  int v[];
+}*/
+
+int main(){
+
+  pila p;
+  int risposta, n;
+  init(p);
+  do{
+    cout << "1) Inserisci elemento pila" << endl;
+    cout << "2) Rimuovi elemento pila" << endl;
+    cout << "3) Restituisci elemento in cima della pila" << endl;
+    cout << "0) Concludi programma" << endl;
+    cin >> risposta;
+    switch(risposta){
+    case 1:
+      cout << "Inserisci numero da inserire: ";
+      cin >> n;
+      push(p, n);
+      break;
+    case 2:
+      pop(p);
+      break;
+    case 3:
+      cout << "Elemento in cima: " << top(p) << endl;;
+      break;
+    case 0:
+      deinit(p);
+      cout << "Fine" << endl;
+      break;
+    default:
+      cout << "Scelta sbagliata" << endl;
+    }
+  }while(risposta!=0);
+  return 0;
+}

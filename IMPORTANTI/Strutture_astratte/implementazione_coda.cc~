@@ -1,0 +1,108 @@
+#include <iostream>
+using namespace std;
+
+const int DIM = 20;
+
+struct coda{
+  int primo;
+  int ultimo;
+  int dim;
+  int * v;
+};
+
+/*Allocata staticamente
+struct coda{
+int successivo;
+int attuale;
+int v[DIM];
+}
+*/
+
+int succ(int indice, const coda & c){
+  return (indice+1)%c.dim;
+}
+
+void init(coda & c){
+  c.primo = 0;
+  c.ultimo = 0;
+  c.dim = DIM+1;
+  c.v = new int[c.dim];
+}
+
+void deinit(coda & c){
+  delete[] c.v;
+}
+
+void enqueue(coda & c, int elemento){
+  if(succ(c.ultimo, c)==c.primo){
+    cout << "CODA PIENA!" << endl;
+  }else{
+    c.v[c.ultimo] = elemento;
+    c.ultimo += succ(c.ultimo, c);
+  }
+}
+
+void dequeue(coda & c){
+  if(c.primo==c.ultimo){
+    cout << "CODA VUOTA" << endl;
+  }else{
+    c.primo = succ(c.primo, c);
+  }
+}
+
+int first(coda & c){
+  int ritorno = -1;
+  if(c.primo==c.ultimo){
+    cout << "CODA VUOTA" << endl;
+  }else{
+    ritorno = c.v[c.primo];
+  }
+  return ritorno;
+}
+
+void print(const coda & c){
+  for(int i = c.primo; i!=c.ultimo; i=succ(i,c)){
+    cout << c.v[i] << " ";
+  }
+  cout << endl;
+}
+
+
+int main(){
+
+  coda c;
+  int risposta, n;
+  init(c);
+  do{
+    cout << "1) Inserisci elemento coda" << endl;
+    cout << "2) Rimuovi elemento coda" << endl;
+    cout << "3) Restituisci coda" << endl;
+    cout << "4) Restituisci primo elemento in coda" << endl;
+    cout << "0) Concludi programma" << endl;
+    cin >> risposta;
+    switch(risposta){
+    case 1:
+      cout << "Inserisci numero da inserire: ";
+      cin >> n;
+      enqueue(c, n);
+      break;
+    case 2:
+      dequeue(c);
+      break;
+    case 3:
+      print(c);
+      break;
+    case 4:
+      cout << "Primo elemento in coda: " << first(c) << endl;
+      break;
+    case 0:
+      deinit(c);
+      cout << "Fine" << endl;
+      break;
+    default:
+      cout << "Scelta sbagliata" << endl;
+    }
+  }while(risposta!=0);
+  
+  return 0;
+}
